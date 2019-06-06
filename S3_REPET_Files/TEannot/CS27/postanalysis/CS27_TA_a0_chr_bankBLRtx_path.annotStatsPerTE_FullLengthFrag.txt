@@ -1,0 +1,1 @@
+TE	length	covg	frags	fullLgthFrags	copies	fullLgthCopies	meanId	sdId	minId	q25Id	medId	q75Id	maxId	meanLgth	sdLgth	minLgth	q25Lgth	medLgth	q75Lgth	maxLgth	meanLgthPerc	sdLgthPerc	minLgthPerc	q25LgthPerc	medLgthPerc	q75LgthPerc	maxLgthPerc

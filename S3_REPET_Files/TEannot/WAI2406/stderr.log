@@ -1,0 +1,879 @@
+
+source activate funannotate
++ source activate funannotate
+#!/bin/sh
+_CONDA_ROOT="/home/benjamin/anaconda3"
+++ _CONDA_ROOT=/home/benjamin/anaconda3
+\. "$_CONDA_ROOT/etc/profile.d/conda.sh" || return $?
+++ . /home/benjamin/anaconda3/etc/profile.d/conda.sh
+_CONDA_EXE="/home/benjamin/anaconda3/bin/conda"
++++ _CONDA_EXE=/home/benjamin/anaconda3/bin/conda
+_CONDA_ROOT="/home/benjamin/anaconda3"
++++ _CONDA_ROOT=/home/benjamin/anaconda3
+_conda_set_vars() {
+    # set _CONDA_SHELL_FLAVOR
+    if [ -n "${BASH_VERSION:+x}" ]; then
+        _CONDA_SHELL_FLAVOR=bash
+    elif [ -n "${ZSH_VERSION:+x}" ]; then
+        _CONDA_SHELL_FLAVOR=zsh
+    elif [ -n "${KSH_VERSION:+x}" ]; then
+        _CONDA_SHELL_FLAVOR=ksh
+    elif [ -n "${POSH_VERSION:+x}" ]; then
+        _CONDA_SHELL_FLAVOR=posh
+    else
+        # default to dash; if we run into a problem here, please raise an issue
+        _CONDA_SHELL_FLAVOR=dash
+    fi
+
+    if [ -z "${_CONDA_EXE+x}" ]; then
+        if [ -n "${_CONDA_ROOT:+x}" ]; then
+            # typically this should be for dev only; _CONDA_EXE should be written at top of file
+            # for normal installs
+            _CONDA_EXE="$_CONDA_ROOT/conda/shell/bin/conda"
+        fi
+        if ! [ -f "${_CONDA_EXE-x}" ]; then
+            _CONDA_EXE="$PWD/conda/shell/bin/conda"
+        fi
+    fi
+
+    # We're not allowing PS1 to be unbound. It must at least be set.
+    # However, we're not exporting it, which can cause problems when starting a second shell
+    # via a first shell (i.e. starting zsh from bash).
+    if [ -z "${PS1+x}" ]; then
+        PS1=
+    fi
+
+}
+
+
+_conda_hashr() {
+    case "$_CONDA_SHELL_FLAVOR" in
+        zsh) \rehash;;
+        posh) ;;
+        *) \hash -r;;
+    esac
+}
+
+
+_conda_activate() {
+    if [ -n "${CONDA_PS1_BACKUP:+x}" ]; then
+        # Handle transition from shell activated with conda <= 4.3 to a subsequent activation
+        # after conda updated to >= 4.4. See issue #6173.
+        PS1="$CONDA_PS1_BACKUP"
+        \unset CONDA_PS1_BACKUP
+    fi
+
+    \local ask_conda
+    ask_conda="$(PS1="$PS1" $_CONDA_EXE shell.posix activate "$@")" || \return $?
+    \eval "$ask_conda"
+
+    _conda_hashr
+}
+
+_conda_deactivate() {
+    \local ask_conda
+    ask_conda="$(PS1="$PS1" $_CONDA_EXE shell.posix deactivate "$@")" || \return $?
+    \eval "$ask_conda"
+
+    _conda_hashr
+}
+
+_conda_reactivate() {
+    \local ask_conda
+    ask_conda="$(PS1="$PS1" $_CONDA_EXE shell.posix reactivate)" || \return $?
+    \eval "$ask_conda"
+
+    _conda_hashr
+}
+
+
+conda() {
+    if [ "$#" -lt 1 ]; then
+        $_CONDA_EXE
+    else
+        \local cmd="$1"
+        shift
+        case "$cmd" in
+            activate)
+                _conda_activate "$@"
+                ;;
+            deactivate)
+                _conda_deactivate "$@"
+                ;;
+            install|update|uninstall|remove)
+                $_CONDA_EXE "$cmd" "$@" && _conda_reactivate
+                ;;
+            *)
+                $_CONDA_EXE "$cmd" "$@"
+                ;;
+        esac
+    fi
+}
+
+
+_conda_set_vars
++++ _conda_set_vars
++++ '[' -n x ']'
++++ _CONDA_SHELL_FLAVOR=bash
++++ '[' -z x ']'
++++ '[' -z '' ']'
++++ PS1=
+
+if [ -z "${CONDA_SHLVL+x}" ]; then
+    \export CONDA_SHLVL=0
+fi
++++ '[' -z x ']'
+
+_conda_activate "$@"
+++ _conda_activate funannotate
+++ '[' -n '' ']'
+++ local ask_conda
+PS1="$PS1" $_CONDA_EXE shell.posix activate "$@"
++++ PS1=
++++ /home/benjamin/anaconda3/bin/conda shell.posix activate funannotate
+++ ask_conda='\. "/home/benjamin/anaconda3/envs/funannotate/etc/conda/deactivate.d/env_vars.sh"
+PS1='\''(funannotate) '\''
+\export CONDA_PROMPT_MODIFIER='\''(funannotate) '\''
+\export CONDA_SHLVL='\''1'\''
+\export PATH='\''/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin'\''
+\. "/home/benjamin/anaconda3/envs/funannotate/etc/conda/activate.d/env_vars.sh"'
+++ eval '\. "/home/benjamin/anaconda3/envs/funannotate/etc/conda/deactivate.d/env_vars.sh"
+PS1='\''(funannotate) '\''
+\export CONDA_PROMPT_MODIFIER='\''(funannotate) '\''
+\export CONDA_SHLVL='\''1'\''
+\export PATH='\''/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin'\''
+\. "/home/benjamin/anaconda3/envs/funannotate/etc/conda/activate.d/env_vars.sh"'
+\. "/home/benjamin/anaconda3/envs/funannotate/etc/conda/deactivate.d/env_vars.sh"
++++ . /home/benjamin/anaconda3/envs/funannotate/etc/conda/deactivate.d/env_vars.sh
+#!/bin/sh
+unset INTPRO
+++++ unset INTPRO
+unset JAVA_HOME
+++++ unset JAVA_HOME
+unset EVM_HOME
+++++ unset EVM_HOME
+unset MANPATH
+++++ unset MANPATH
+unset INFOPATH
+++++ unset INFOPATH
+unset REPET_PATH
+++++ unset REPET_PATH
+unset BAMTOOLS_PATH
+++++ unset BAMTOOLS_PATH
+unset SAMTOOLS_PATH
+++++ unset SAMTOOLS_PATH
+unset GENEMARK_PATH
+++++ unset GENEMARK_PATH
+unset PERL5LIB
+++++ unset PERL5LIB
+unset AUGUSTUS_CONFIG_PATH
+++++ unset AUGUSTUS_CONFIG_PATH
+PS1='(funannotate) '
++++ PS1='(funannotate) '
+\export CONDA_PROMPT_MODIFIER='(funannotate) '
++++ export 'CONDA_PROMPT_MODIFIER=(funannotate) '
++++ CONDA_PROMPT_MODIFIER='(funannotate) '
+\export CONDA_SHLVL='1'
++++ export CONDA_SHLVL=1
++++ CONDA_SHLVL=1
+\export PATH='/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin'
++++ export PATH=/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin
++++ PATH=/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin
+\. "/home/benjamin/anaconda3/envs/funannotate/etc/conda/activate.d/env_vars.sh"
++++ . /home/benjamin/anaconda3/envs/funannotate/etc/conda/activate.d/env_vars.sh
+#!/bin/sh
+PERL5LIB=/usr/local/lib/x86_64-linux-gnu/perl/5.22.1:/home/marcin/bioinfo:/usr/local/bioinfo/PASApipeline/PerlLib:/usr/local/bioinfo/tcoffee11/perl/lib/perl5:/home/benjamin/anaconda3/envs/funannotate/lib/perl5/5.22.0:/home/benjamin/anaconda3/envs/funannotate/lib/perl5/site_perl/5.22.0/
+++++ PERL5LIB=/usr/local/lib/x86_64-linux-gnu/perl/5.22.1:/home/marcin/bioinfo:/usr/local/bioinfo/PASApipeline/PerlLib:/usr/local/bioinfo/tcoffee11/perl/lib/perl5:/home/benjamin/anaconda3/envs/funannotate/lib/perl5/5.22.0:/home/benjamin/anaconda3/envs/funannotate/lib/perl5/site_perl/5.22.0/
+AUGUSTUS_CONFIG_PATH=/home/benjamin/anaconda3/envs/funannotate/config
+++++ AUGUSTUS_CONFIG_PATH=/home/benjamin/anaconda3/envs/funannotate/config
+GENEMARK_PATH=/home/benjamin/anaconda3/envs/funannotate/bin
+++++ GENEMARK_PATH=/home/benjamin/anaconda3/envs/funannotate/bin
+SAMTOOLS_PATH=/home/benjamin/anaconda3/envs/funannotate/bin/samtools
+++++ SAMTOOLS_PATH=/home/benjamin/anaconda3/envs/funannotate/bin/samtools
+BAMTOOLS_PATH=/home/benjamin/anaconda3/envs/funannotate/bin
+++++ BAMTOOLS_PATH=/home/benjamin/anaconda3/envs/funannotate/bin
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+++++ JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+PATH=$PATH:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:$JAVA_HOME/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin
+++++ PATH=/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin
+PATH=$PATH:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin
+++++ PATH=/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin
+export INTPRO="/home/benjamin/anaconda3/envs/funannotate/interproscan-5.21-60.0"
+++++ export INTPRO=/home/benjamin/anaconda3/envs/funannotate/interproscan-5.21-60.0
+++++ INTPRO=/home/benjamin/anaconda3/envs/funannotate/interproscan-5.21-60.0
+export EVM_HOME="/home/benjamin/bin/EVidenceModeler-1.1.1"
+++++ export EVM_HOME=/home/benjamin/bin/EVidenceModeler-1.1.1
+++++ EVM_HOME=/home/benjamin/bin/EVidenceModeler-1.1.1
+export PATH="/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:$PATH"
+++++ export PATH=/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin
+++++ PATH=/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin
+export MANPATH="/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/share/man:$MANPATH"
+++++ export MANPATH=/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/share/man:
+++++ MANPATH=/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/share/man:
+export INFOPATH="/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/share/info:$INFOPATH"
+++++ export INFOPATH=/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/share/info:
+++++ INFOPATH=/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/share/info:
+export REPET_PATH="/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5"
+++++ export REPET_PATH=/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5
+++++ REPET_PATH=/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5
+export JAVA_HOME
+++++ export JAVA_HOME
+export BAMTOOLS_PATH
+++++ export BAMTOOLS_PATH
+export SAMTOOLS_PATH
+++++ export SAMTOOLS_PATH
+export GENEMARK_PATH
+++++ export GENEMARK_PATH
+export PERL5LIB
+++++ export PERL5LIB
+export AUGUSTUS_CONFIG_PATH
+++++ export AUGUSTUS_CONFIG_PATH
+++ _conda_hashr
+++ case "$_CONDA_SHELL_FLAVOR" in
+++ hash -r
+
+#get the folder and directories we are are in
+
+CURDIR=$PWD
++ CURDIR=/home/benjamin/Megan/REPET2/TEannot/WAI2406
+echo $CURDIR
++ echo /home/benjamin/Megan/REPET2/TEannot/WAI2406
+
+########CHANGE THE INPUT TEdenovo database before staring off########
+denovoTElib=/home/benjamin/Megan/REPET2/combined_TEs/six_TEs_without_Redundancy_ToxA.fa
++ denovoTElib=/home/benjamin/Megan/REPET2/combined_TEs/six_TEs_without_Redundancy_ToxA.fa
+
+########THIS SHALL BE THE MYSQL TABELS THAT ARE USED TO CLASSIFY ALL THE REPEATS OF all Tedenovolibs######
+########INCASE YOU COMBINED MULIPLE TEDENOVO DATABASES BY 'HAND' YOU NEED TO GENERATE THE RESPECTIVE MYSQL TABLE  'HAND'####
+CLASSIF_TABLE=six_TEs_without_Redundancy_ToxA_consensus_classif
++ CLASSIF_TABLE=six_TEs_without_Redundancy_ToxA_consensus_classif
+
+genome=$1
++ genome=WAI2406_TA_a0.fa
+len=${#genome}
++ len=16
+PNAME=${genome:0:len-3}
++ PNAME=WAI2406_TA_a0
+TEANO0CFG=Teano0_${PNAME}.cfg
++ TEANO0CFG=Teano0_WAI2406_TA_a0.cfg
+TEannotmp=TEannot.cfg.tmp
++ TEannotmp=TEannot.cfg.tmp
+
+#get the genome size which is required later on for post analysis
+gsize="$(grep -v '^>' $genome | wc -m)"
+grep -v '^>' $genome | wc -m
+++ grep -v '^>' WAI2406_TA_a0.fa
+++ wc -m
++ gsize=36933490
+
+#check if PNAME is less than 15 characters
+if [ $len -gt 17 ]
+then
+	echo "Shorten your genome fasta file name to less than 17 characters"
+	exit
+fi
++ '[' 16 -gt 17 ']'
+
+#soft link all the databases
+ln -s ~/anaconda3/envs/funannotate/REPET_linux-x64-2.5/db/repbase20.05_aaSeq_cleaned_TE.fa .
++ ln -s /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/db/repbase20.05_aaSeq_cleaned_TE.fa .
+ln -s ~/anaconda3/envs/funannotate/REPET_linux-x64-2.5/db/repbase20.05_ntSeq_cleaned_TE.fa .
++ ln -s /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/db/repbase20.05_ntSeq_cleaned_TE.fa .
+ln -s /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/db/ProfilesBankForREPET_Pfam27.0_GypsyDB.hmm .
++ ln -s /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/db/ProfilesBankForREPET_Pfam27.0_GypsyDB.hmm .
+ln -s /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/db/SILVA_132_XSURef_tax_silva_trunc.fasta .
++ ln -s /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/db/SILVA_132_XSURef_tax_silva_trunc.fasta .
+cp /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/config/${TEannotmp} .
++ cp /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/config/TEannot.cfg.tmp .
+cp ${denovoTElib} ${PNAME}_refTEs.fa
++ cp /home/benjamin/Megan/REPET2/combined_TEs/six_TEs_without_Redundancy_ToxA.fa WAI2406_TA_a0_refTEs.fa
+
+
+#source the REPET config file to set up the environment
+source /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/config/setEnv.sh
++ source /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/config/setEnv.sh
+export REPET_HOST=127.0.0.1
+++ export REPET_HOST=127.0.0.1
+++ REPET_HOST=127.0.0.1
+export REPET_USER=pasa_rw
+++ export REPET_USER=pasa_rw
+++ REPET_USER=pasa_rw
+export REPET_PW=pasaje
+++ export REPET_PW=pasaje
+++ REPET_PW=pasaje
+export REPET_DB=REPET_Pst79p
+++ export REPET_DB=REPET_Pst79p
+++ REPET_DB=REPET_Pst79p
+export REPET_PORT=3306
+++ export REPET_PORT=3306
+++ REPET_PORT=3306
+
+
+export REPET_PATH=/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5
+++ export REPET_PATH=/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5
+++ REPET_PATH=/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5
+export PYTHONPATH=$REPET_PATH
+++ export PYTHONPATH=/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5
+++ PYTHONPATH=/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5
+export REPET_JOBS=MySQL
+++ export REPET_JOBS=MySQL
+++ REPET_JOBS=MySQL
+export REPET_JOB_MANAGER=SGE
+++ export REPET_JOB_MANAGER=SGE
+++ REPET_JOB_MANAGER=SGE
+export REPET_QUEUE=SGE
+++ export REPET_QUEUE=SGE
+++ REPET_QUEUE=SGE
+export PATH=$REPET_PATH/bin:$PATH
+++ export PATH=/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin
+++ PATH=/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/.linuxbrew/bin:/home/benjamin/anaconda3/envs/funannotate/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/home/benjamin/anaconda3/mummer-4.0.0/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/home/benjamin/bin:/home/benjamin/anaconda3/bin:/usr/local/bioinfo/tcoffee11/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/local/bioinfo/a5/bin:/usr/local/bioinfo/aragorn1.2.38:/usr/local/bioinfo/barrnap-0.7/bin:/usr/local/bioinfo/ca/bin:/usr/local/bioinfo/canu/bin:/usr/local/bioinfo/cap3:/usr/local/bioinfo/hisat2:/usr/local/bioinfo/kraken-0.10.5-beta:/usr/local/bioinfo/nanopolish:/usr/local/bioinfo/NOVOPlasty:/usr/local/bioinfo/Organelle_PBA:/usr/local/bioinfo/PASApipeline/bin:/usr/local/bioinfo/phylip:/usr/local/bioinfo/pilon:/usr/local/bioinfo/Platypus_0.8.1:/usr/local/bioinfo/prokka/bin:/usr/local/bioinfo/prottest3:/usr/local/bioinfo/signalp-4.1:/usr/local/bioinfo/soap:/usr/local/bioinfo/SPAdes/bin:/usr/local/bioinfo/sprai/bin:/usr/local/bioinfo/SSPACE-LongRead_v1-1:/usr/local/bioinfo/stacks-1.41:/usr/local/bioinfo/subread/bin:/usr/local/bioinfo/Unicycler:/usr/local/bioinfo/velvet:/usr/local/bioinfo/samtools/bin:/usr/local/bioinfo/Salmon-0.9.1/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin:/home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin:/home/benjamin/anaconda3/envs/funannotate/get_homologues:/home/benjamin/anaconda3/envs/funannotate/orthomcl-pipeline/scripts/../bin:/home/benjamin/anaconda3/envs/funannotate/orthomclSoftware-v2.0.9/bin
+
+#fix up the TEdenovo.cfg file
+cat ${TEannotmp} |  sed "s/P_NAME/$PNAME/" | sed  's|P_DIR|'$CURDIR'|' | sed  's|CLASSIF_TABLE|'$CLASSIF_TABLE'|' > ${TEANO0CFG}
++ cat TEannot.cfg.tmp
++ sed s/P_NAME/WAI2406_TA_a0/
++ sed 's|P_DIR|/home/benjamin/Megan/REPET2/TEannot/WAI2406|'
++ sed 's|CLASSIF_TABLE|six_TEs_without_Redundancy_ToxA_consensus_classif|'
+rm ${TEannotmp} 
++ rm TEannot.cfg.tmp
+
+
+
+
+#now run the whole pipeline
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 1
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 1
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 2 -a BLR
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 2 -a BLR
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 2 -a CEN
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 2 -a CEN
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 2 -a RM
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 2 -a RM
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 2 -a BLR -r
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 2 -a BLR -r
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 2 -a CEN -r
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 2 -a CEN -r
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 2 -a RM -r
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 2 -a RM -r
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 3 -c BLR+RM+CEN
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 3 -c BLR+RM+CEN
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 6 -b tblastx
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 6 -b tblastx
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7121: 14
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7140: 21
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7161: 51
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7169: 11
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7171: 40
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7173: 27
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7179: 59
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7180: 27
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7186: 49
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7194: 46
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7195: 6, 29
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7199: 38
+FASTA-Reader: Ignoring invalid residues at position(s): On line 7205: 1
+FASTA-Reader: Ignoring invalid residues at position(s): On line 23115: 38
+FASTA-Reader: Ignoring invalid residues at position(s): On line 143717: 55
+FASTA-Reader: Ignoring invalid residues at position(s): On line 143744: 37, 43, 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 143746: 37
+FASTA-Reader: Ignoring invalid residues at position(s): On line 143751: 6
+FASTA-Reader: Ignoring invalid residues at position(s): On line 143752: 17
+FASTA-Reader: Ignoring invalid residues at position(s): On line 149265: 18
+FASTA-Reader: Ignoring invalid residues at position(s): On line 149283: 41
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459732: 34
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459738: 3
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459739: 56
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459743: 9
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459746: 9
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459749: 39
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459752: 13
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459756: 3
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459757: 14
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459759: 27
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459760: 60
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459761: 16
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459762: 17
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459763: 10
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459766: 17
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459771: 33, 36
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459776: 14
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459780: 24, 33, 47
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459782: 32, 57
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459789: 39
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459790: 25
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459792: 26, 36, 51
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459795: 49-50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 459796: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 506813: 28
+FASTA-Reader: Ignoring invalid residues at position(s): On line 506815: 43
+FASTA-Reader: Ignoring invalid residues at position(s): On line 506816: 29, 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 506817: 27
+FASTA-Reader: Ignoring invalid residues at position(s): On line 506818: 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 506819: 15
+FASTA-Reader: Ignoring invalid residues at position(s): On line 506820: 12
+FASTA-Reader: Ignoring invalid residues at position(s): On line 506821: 20
+FASTA-Reader: Ignoring invalid residues at position(s): On line 506822: 27
+FASTA-Reader: Ignoring invalid residues at position(s): On line 514719: 14
+FASTA-Reader: Ignoring invalid residues at position(s): On line 514729: 42
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515029: 57
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515030: 8
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515386: 20
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515923: 38
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515930: 32
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515931: 10, 55
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515938: 1, 28
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515940: 54, 57
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515941: 12
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515943: 53
+FASTA-Reader: Ignoring invalid residues at position(s): On line 515946: 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 565171: 34
+FASTA-Reader: Ignoring invalid residues at position(s): On line 601377: 13
+FASTA-Reader: Ignoring invalid residues at position(s): On line 601378: 48
+FASTA-Reader: Ignoring invalid residues at position(s): On line 602659: 59
+FASTA-Reader: Ignoring invalid residues at position(s): On line 610890: 18
+FASTA-Reader: Ignoring invalid residues at position(s): On line 610916: 8
+FASTA-Reader: Ignoring invalid residues at position(s): On line 610934: 24
+FASTA-Reader: Ignoring invalid residues at position(s): On line 610951: 4
+FASTA-Reader: Ignoring invalid residues at position(s): On line 610996: 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 618047: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 665588: 58
+FASTA-Reader: Ignoring invalid residues at position(s): On line 665590: 35
+FASTA-Reader: Ignoring invalid residues at position(s): On line 707500: 16
+FASTA-Reader: Ignoring invalid residues at position(s): On line 707512: 17
+FASTA-Reader: Ignoring invalid residues at position(s): On line 707532: 37
+FASTA-Reader: Ignoring invalid residues at position(s): On line 727274: 30
+FASTA-Reader: Ignoring invalid residues at position(s): On line 727276: 27-28, 32
+FASTA-Reader: Ignoring invalid residues at position(s): On line 727281: 28
+FASTA-Reader: Ignoring invalid residues at position(s): On line 727282: 28
+FASTA-Reader: Ignoring invalid residues at position(s): On line 876709: 44
+FASTA-Reader: Ignoring invalid residues at position(s): On line 876710: 12
+FASTA-Reader: Ignoring invalid residues at position(s): On line 876714: 32
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1106684: 15
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1106685: 23, 48
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1106686: 31
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1106690: 49
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1106697: 55
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1106714: 20
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1106718: 15
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1106733: 31
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1106736: 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1109404: 52
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1109429: 53
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1109430: 22, 44
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1109450: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1109456: 1
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1109471: 6
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1109520: 39
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1112585: 17
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1112587: 59
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1112591: 32
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1112595: 51
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1113536: 41
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1113541: 11
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1113570: 51
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1113584: 18
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1118343: 60
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1118350: 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1121081: 8
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1127414: 17
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1127419: 24
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1127420: 1
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1127422: 51
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1127423: 35
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1127424: 24, 47
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1127426: 16, 54
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1127427: 8
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1135334: 31
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1135335: 17
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1135340: 45, 47
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1135343: 60
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1135365: 59
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1135367: 38
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1161791: 23
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1161792: 4
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1168456: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1168488: 11
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1168491: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1168500: 22
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1168501: 9
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1168565: 25
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1169494: 6
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1169504: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1176693: 20
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1176695: 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1176697: 8
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1176700: 32
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1176703: 12
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1176707: 58
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1176708: 30
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1176713: 13
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1178414: 35
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1178418: 7
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1178482: 21
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1178485: 32
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1185251: 35
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1185494: 20
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1186167: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1186170: 22
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1186948: 8
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266074: 15
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266075: 42
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266080: 29
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266081: 32, 54
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266082: 9, 30
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266083: 54
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266086: 1, 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266088: 9, 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266089: 57
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266090: 13
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266094: 53
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266095: 34
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266100: 2, 7, 56
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266101: 4
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266103: 56
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1266104: 6
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1429179: 31
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1429187: 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1429213: 8, 52
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1429266: 37
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1429277: 10-11
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1429281: 2
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1429297: 40
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1429301: 46
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430207: 2, 7
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430208: 36
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430210: 10
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430214: 49
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430215: 54
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430230: 51
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430231: 44
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430622: 2
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430623: 49
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430624: 37
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430630: 32
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430678: 52
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430680: 57, 60
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430686: 18, 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430691: 37
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430695: 11
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430696: 18
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430935: 42, 54
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430936: 5
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430941: 46
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1430942: 9
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1431165: 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1431182: 20
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1431358: 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1431360: 36
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1431365: 12
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1431366: 5, 36
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1431367: 3
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1431491: 47
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1432276: 53
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1432366: 24
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1432382: 17
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433503: 44, 60
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433504: 1
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433506: 39
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433511: 4, 17, 35
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433514: 11
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433515: 16, 54
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433516: 49
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433520: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433522: 3
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433524: 5, 10, 42, 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1433527: 49
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1436420: 31
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1436424: 20
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1436425: 29
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1436429: 29
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1436477: 16, 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1436482: 53
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1436483: 23
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1436484: 11
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1436485: 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1436487: 8
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1440172: 23
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1442144: 29
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1443022: 20
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1445824: 40
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1446352: 27
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1451632: 19, 35
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1451633: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1451634: 5-6, 12, 22
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1451638: 30, 47
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1451640: 19, 57
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1451641: 56
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1451643: 30
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1451645: 56
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1451647: 1
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1454212: 25
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1454217: 42
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1454218: 2
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1458398: 22, 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1458399: 47, 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1458400: 24
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1458402: 18
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1458405: 58
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1464170: 14
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1464171: 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1464173: 20
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1464175: 8
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1474428: 43
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1477478: 16
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1478281: 10
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1479950: 17
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1479963: 30
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1487988: 46
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1487991: 16
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1488009: 41
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1488023: 22
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1493143: 33
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1493653: 38
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1493670: 24
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1493674: 1
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1493683: 57
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1493685: 12
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1499869: 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1499872: 2
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1499876: 2
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1499877: 44
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1499884: 13
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1499890: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1511129: 2
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1514340: 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1514363: 53
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1514364: 14
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1514379: 33, 44
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1514380: 35
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1514381: 28, 30-31
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1515103: 11
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1515706: 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1515707: 1, 54
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1515943: 4, 26, 36
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1515944: 16, 52
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1515945: 14, 18, 31
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1515946: 41
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1515947: 12
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1515950: 10
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528231: 13
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528234: 14, 59
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528235: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528236: 16, 26, 28, 32, 42
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528239: 8
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528246: 15
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528249: 12, 39, 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528250: 12
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528253: 3
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528260: 1
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528261: 33
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528265: 11
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528266: 4
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528273: 20
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528280: 35
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528281: 29, 36
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528282: 51
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528283: 37
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528285: 19
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528286: 28
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528289: 10
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528290: 46, 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528291: 36
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528295: 12, 14, 51
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528296: 37, 43
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528297: 4, 19
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528300: 54
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528302: 18-19
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528303: 56
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528305: 23
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528307: 20, 22, 56
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528311: 22
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528314: 9, 12, 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528315: 24, 26, 56
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528316: 24, 30
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528317: 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528318: 35
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528322: 9, 12
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528323: 40
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528324: 10
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528326: 8
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528333: 16
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528334: 32
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528337: 24
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528338: 25
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528341: 3
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528342: 4, 27
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1528343: 7, 21
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1529900: 3
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1529932: 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1529933: 1, 12
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1529934: 27
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1529935: 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1539526: 48
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542194: 46
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542201: 15
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542205: 32
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542207: 36
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542209: 40
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542210: 11, 13
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542218: 3
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542220: 57
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542223: 30
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542224: 25
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542226: 43
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542227: 36
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542231: 50
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542236: 1, 29
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542241: 5, 9
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542251: 2
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542253: 60
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542256: 43
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542257: 38
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542261: 34
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1542263: 4, 6
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1558388: 4
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1558389: 40
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1558394: 33
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1558405: 43
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1558406: 2
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1558408: 46
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1558427: 9
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1558646: 42, 44
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1560684: 23
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1608288: 45
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1660379: 34, 48
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1660380: 27
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1660382: 22-23
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1660383: 46
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1660401: 55
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1660406: 22
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1660417: 32
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1699766: 52
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1740542: 7
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1740545: 56
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1740546: 10, 24
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1740548: 10
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1744675: 21
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1765330: 46
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1792566: 26
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1792568: 24
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1792569: 22, 59
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1792570: 29-30, 32-33, 39
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1802987: 30
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1813044: 12, 37
+FASTA-Reader: Ignoring invalid residues at position(s): On line 1813141: 47
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 6 -b blastx
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 6 -b blastx
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 7
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 7
+TEannot.py -P ${PNAME} -C ${TEANO0CFG} -S 8 -o GFF3
++ TEannot.py -P WAI2406_TA_a0 -C Teano0_WAI2406_TA_a0.cfg -S 8 -o GFF3
+
+
+srptCreateTable.py -f ${PNAME}_refTEs.fa -n ${PNAME}_refTEs -t fasta -c ${TEANO0CFG}
++ srptCreateTable.py -f WAI2406_TA_a0_refTEs.fa -n WAI2406_TA_a0_refTEs -t fasta -c Teano0_WAI2406_TA_a0.cfg
+
+mkdir postanalysis
++ mkdir postanalysis
+cp ${PNAME}_refTEs.fa postanalysis/.
++ cp WAI2406_TA_a0_refTEs.fa postanalysis/.
+cd postanalysis
++ cd postanalysis
+
+
+#
+#now do post analysis
+
+PostAnalyzeTELib.py -p ${PNAME}_chr_allTEs_path -s ${PNAME}_refTEs_seq -i ${PNAME}_refTEs.fa -g ${gsize}
++ PostAnalyzeTELib.py -p WAI2406_TA_a0_chr_allTEs_path -s WAI2406_TA_a0_refTEs_seq -i WAI2406_TA_a0_refTEs.fa -g 36933490
+PostAnalyzeTELib.py -a 2 -t ${PNAME}_refTEs.fa_blastclust.tab
++ PostAnalyzeTELib.py -a 2 -t WAI2406_TA_a0_refTEs.fa_blastclust.tab
+
+PostAnalyzeTELib.py -a 3 -p ${PNAME}_chr_allTEs_path -s ${PNAME}_refTEs_seq -g ${gsize}
++ PostAnalyzeTELib.py -a 3 -p WAI2406_TA_a0_chr_allTEs_path -s WAI2406_TA_a0_refTEs_seq -g 36933490
+GetSpecificTELibAccordingToAnnotation.py -i ${PNAME}_chr_allTEs_path.annotStatsPerTE.tab -t ${PNAME}_refTEs_seq
++ GetSpecificTELibAccordingToAnnotation.py -i WAI2406_TA_a0_chr_allTEs_path.annotStatsPerTE.tab -t WAI2406_TA_a0_refTEs_seq
+PostAnalyzeTELib.py -a 3 -p ${PNAME}_chr_allTEs_nr_join_path -s ${PNAME}_refTEs_seq -g ${gsize}
++ PostAnalyzeTELib.py -a 3 -p WAI2406_TA_a0_chr_allTEs_nr_join_path -s WAI2406_TA_a0_refTEs_seq -g 36933490
+GetSpecificTELibAccordingToAnnotation.py -i ${PNAME}_chr_allTEs_nr_join_path.annotStatsPerTE.tab -t ${PNAME}_refTEs_seq
++ GetSpecificTELibAccordingToAnnotation.py -i WAI2406_TA_a0_chr_allTEs_nr_join_path.annotStatsPerTE.tab -t WAI2406_TA_a0_refTEs_seq
+
+PostAnalyzeTELib.py -a 3 -p ${PNAME}_chr_bankBLRx_path -s repbase2005_aaSeq_cleaned_TE -g ${gsize}
++ PostAnalyzeTELib.py -a 3 -p WAI2406_TA_a0_chr_bankBLRx_path -s repbase2005_aaSeq_cleaned_TE -g 36933490
+GetSpecificTELibAccordingToAnnotation.py -i ${PNAME}_chr_bankBLRx_path.annotStatsPerTE.tab -t repbase2005_aaSeq_cleaned_TE
++ GetSpecificTELibAccordingToAnnotation.py -i WAI2406_TA_a0_chr_bankBLRx_path.annotStatsPerTE.tab -t repbase2005_aaSeq_cleaned_TE
+
+PostAnalyzeTELib.py -a 3 -p ${PNAME}_chr_bankBLRtx_path -s repbase2005_ntSeq_cleaned_TE -g ${gsize}
++ PostAnalyzeTELib.py -a 3 -p WAI2406_TA_a0_chr_bankBLRtx_path -s repbase2005_ntSeq_cleaned_TE -g 36933490
+GetSpecificTELibAccordingToAnnotation.py -i ${PNAME}_chr_bankBLRtx_path.annotStatsPerTE.tab -t repbase2005_ntSeq_cleaned_TE
++ GetSpecificTELibAccordingToAnnotation.py -i WAI2406_TA_a0_chr_bankBLRtx_path.annotStatsPerTE.tab -t repbase2005_ntSeq_cleaned_TE
+
+#now do the second round of TE annotation
+
+#denovoTElib1=${CURDIR}/${PNAME}_chr_allTEs_nr_join_path.annotStatsPerTE_FullLengthFrag.fa
+
+#mkdir TEanno_full
+#cd TEanno_full
+
+#now set new variables
+#CURDIR=$PWD
+#genome1="$(echo $genome | sed 's/a0/a1/')"
+#len1=${#genome1}
+#PNAME1=${genome1:0:len1-3}
+#TEANO1CFG=Teano1_${PNAME1}.cfg
+
+
+
+#soft link all the databases
+#ln -s ~/anaconda3/envs/funannotate/REPET_linux-x64-2.5/db/repbase20.05_aaSeq_cleaned_TE.fa .
+#ln -s ~/anaconda3/envs/funannotate/REPET_linux-x64-2.5/db/repbase20.05_ntSeq_cleaned_TE.fa .
+#cp /home/benjamin/anaconda3/envs/funannotate/REPET_linux-x64-2.5/config/${TEannotmp} .
+#cp ${denovoTElib1} ${PNAME1}_refTEs.fa
+#cp ../${genome} ${genome1}
+
+
+#fix up the TEannot.cfg file
+#cat ${TEannotmp} |  sed "s/P_NAME/$PNAME1/" | sed  's|P_DIR|'$CURDIR'|' | sed  's|CLASSIF_TABLE|'$CLASSIF_TABLE'|' > ${TEANO1CFG}
+#rm ${TEannotmp}
+
+#now run the second round of annotation
+
+#now run the whole pipeline
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 1
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 2 -a BLR
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 2 -a CEN
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 2 -a RM
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 2 -a BLR -r
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 2 -a CEN -r
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 2 -a RM -r
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 3 -c BLR+RM+CEN
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 4 -s TRF
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 4 -s Mreps
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 4 -s RMSSR
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 5
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 6 -b tblastx
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 6 -b blastx
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 7
+#TEannot.py -P ${PNAME1} -C ${TEANO1CFG} -S 8 -o GFF3
+
+#now to the full post analysis in new folder
+
+#mkdir postanalysis
+#cp ${PNAME1}_refTEs.fa postanalysis/.
+#cd postanalysis
+
+#PostAnalyzeTELib.py -p ${PNAME1}_chr_allTEs_path -s ${PNAME1}_refTEs_seq -i ${PNAME1}_refTEs.fa -g ${gsize}
+#PostAnalyzeTELib.py -a 2 -t ${PNAME1}_refTEs.fa_blastclust.tab
+#
+#PostAnalyzeTELib.py -a 3 -p ${PNAME1}_chr_allTEs_path -s ${PNAME1}_refTEs_seq -g ${gsize}
+#GetSpecificTELibAccordingToAnnotation.py -i ${PNAME1}_chr_allTEs_path.annotStatsPerTE.tab -t ${PNAME1}_refTEs_seq
+#PostAnalyzeTELib.py -a 3 -p ${PNAME1}_chr_allTEs_path -s ${PNAME1}_refTEs_seq -g ${gsize}
+#PostAnalyzeTELib.py -a 3 -p ${PNAME1}_chr_allTEs_nr_noSSR_join_path -s ${PNAME1}_refTEs_seq -g ${gsize}
+#GetSpecificTELibAccordingToAnnotation.py -i ${PNAME1}_chr_allTEs_nr_noSSR_join_path.annotStatsPerTE.tab -t ${PNAME1}_refTEs_seq
+#
+#PostAnalyzeTELib.py -a 3 -p ${PNAME1}_chr_bankBLRx_path -s repbase2005_aaSeq_cleaned_TE -g ${gsize}
+#GetSpecificTELibAccordingToAnnotation.py -i ${PNAME1}_chr_bankBLRx_path.annotStatsPerTE.tab -t repbase2005_aaSeq_cleaned_TE
+#
+#PostAnalyzeTELib.py -a 3 -p ${PNAME1}_chr_bankBLRtx_path -s repbase2005_ntSeq_cleaned_TE -g ${gsize}
+#GetSpecificTELibAccordingToAnnotation.py -i ${PNAME1}_chr_bankBLRtx_path.annotStatsPerTE.tab -t repbase2005_ntSeq_cleaned_TE
+

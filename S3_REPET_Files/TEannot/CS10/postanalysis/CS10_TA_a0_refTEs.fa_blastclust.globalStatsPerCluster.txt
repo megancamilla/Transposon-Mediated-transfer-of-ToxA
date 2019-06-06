@@ -1,0 +1,11 @@
+nb of clusters: 489
+nb of clusters with 1 sequence: 418
+nb of clusters with 2 sequences: 38
+nb of clusters with >2 sequences: 33 (459 sequences)
+nb of sequences: 953
+nb of sequences in the largest cluster: 144
+nb of sequences in the smallest cluster: 1
+size of the smallest sequence: 113
+size of the largest sequence: 25423
+average sequences size: 6653
+median sequences size: 5517

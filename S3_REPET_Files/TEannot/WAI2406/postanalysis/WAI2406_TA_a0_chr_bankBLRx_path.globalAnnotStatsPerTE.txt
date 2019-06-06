@@ -1,0 +1,21 @@
+nb of sequences: 24195
+nb of matched sequences: 838
+cumulative coverage: 2655898 bp
+coverage percentage: 7.19%
+
+total nb of TE fragments: 7052
+total nb full-length fragments: 140 (1.99%)
+total nb of TE copies: 5462
+total nb full-length copies: 116 (2.12%)
+families with full-length fragments: 57 (0.24%)
+ with only one full-length fragment: 33
+ with only two full-length fragments: 7
+ with only three full-length fragments: 6
+ with more than three full-length fragments: 11
+families with full-length copies: 52 (0.21%)
+ with only one full-length copy: 29
+ with only two full-length copies: 7
+ with only three full-length copies: 8
+ with more than three full-length copies: 8
+mean of median identity of all families: 34.96 +- 8.47
+mean of median length percentage of all families: 25.89 +- 45.76

@@ -1,0 +1,2 @@
+TE	length	covg	frags	fullLgthFrags	copies	fullLgthCopies	meanId	sdId	minId	q25Id	medId	q75Id	maxId	meanLgth	sdLgth	minLgth	q25Lgth	medLgth	q75Lgth	maxLgth	meanLgthPerc	sdLgthPerc	minLgthPerc	q25LgthPerc	medLgthPerc	q75LgthPerc	maxLgthPerc
+I-2_CH:ClassI:LINE:I	5795	202772	771	0	229	5	72.77	10.45	31.17	69.79	75.39	78.97	87.89	918.38	1383.67	21	218.00	334.00	920.00	7467	15.85	23.88	0.36	3.76	5.76	15.88	128.85

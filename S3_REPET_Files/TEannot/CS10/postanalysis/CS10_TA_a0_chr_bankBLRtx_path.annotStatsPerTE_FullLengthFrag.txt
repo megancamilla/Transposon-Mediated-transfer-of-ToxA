@@ -1,0 +1,2 @@
+TE	length	covg	frags	fullLgthFrags	copies	fullLgthCopies	meanId	sdId	minId	q25Id	medId	q75Id	maxId	meanLgth	sdLgth	minLgth	q25Lgth	medLgth	q75Lgth	maxLgth	meanLgthPerc	sdLgthPerc	minLgthPerc	q25LgthPerc	medLgthPerc	q75LgthPerc	maxLgthPerc
+Gypsy-2_CH:ClassI:LTR:Gypsy	7411	377515	1462	1	1046	3	66.70	15.19	29.55	56.10	68.08	78.79	100.00	375.71	764.64	21	38.00	105.00	363.00	7349	5.07	10.32	0.28	0.51	1.42	4.90	99.16

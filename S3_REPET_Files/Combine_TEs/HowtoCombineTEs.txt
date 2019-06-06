@@ -1,0 +1,69 @@
+### These are instructions on how to make a non-redundant REPET database after generating several independent ones with TEdenovo
+### Info here is only a rough guide provided to us by the REPET authors
+### For specific help please contact https://urgi.versailles.inra.fr/Tools/REPET
+### Many of the PATHs in this file are here for example only, the commands will not work as-is on your computer
+
+
+1) Make a dedicated folder for your combined data base to live
+mkdir combined_TEs
+
+2) CD into your new directory
+
+cd combined_TEs
+
+3) Look at your filtered TEdenovo libraries from your TEdenovo run, count how many transposons you have
+
+For example:
+cat  /home/REPET/CS10/CS10_Blaster_GrpRecPil_Struct_Map_TEclassif_Filtered/CS10_denovoLibTEs_filtered.fa | grep -c ">"
+384
+cat /home/REPET/PTR/Ptr_1CBFP_Blaster_GrpRecPil_Struct_Map_TEclassif_Filtered/Ptr_1CBFP_denovoLibTEs_filtered.fa | grep -c ">"
+378
+
+4) Now link these two filtered.fa files to the folder you created above and concat them together into a single fasta file
+
+#make sure you are in the right folder
+cd combined_TEs
+
+#sudo link the fasta files to the combined_TEs folder
+ln -s /home/REPET/PTR/Ptr_1CBFP_Blaster_GrpRecPil_Struct_Map_TEclassif_Filtered/Ptr_1CBFP_denovoLibTEs_filtered.fa LibTE-PTR.fa
+ln -s /home/REPET/CS10/CS10_Blaster_GrpRecPil_Struct_Map_TEclassif_Filtered/CS10_denovoLibTEs_filtered.fa  LibTE-CS10.fa
+
+#combine the .fa files into a single file
+cat LibTE*.fa >> LibTEC.fa
+
+5) Sanity check your new LibTEC.fa file should have the sum of all your individual fasta files!
+
+cat LibTEC.fa |  grep -c ">"
+762
+
+6) Now do the same thing the the classif files for each of your TEdenovo.fa files, these classif files will be loaded into the MySQL database
+
+ln -s /home/benjamin/Megan/REPET2/CS10/CS10_Blaster_GrpRecPil_Struct_Map_TEclassif_Filtered/classifFileFromList.classif LibTE-CS10.fa.classif
+ln -s /home/benjamin/Megan/REPET2/PTR/Ptr_1CBFP_Blaster_GrpRecPil_Struct_Map_TEclassif_Filtered/classifFileFromList.classif LibTE-Ptr_1CBFP.fa.classif
+
+cat LibTE*.classif >> LibTEC.fa.classif
+
+### Sanity Check, should be the same number as your LibTEC.fa file above! ### 
+wc LibTEC.fa.classif
+762
+
+7) Use the REPET python script to remove redundant TEs 
+### You can change the settings in the .cfg file to play around with how strictly you collapse TEs
+### This particular .cfg file and changed the following: min_redundancy_identity: 90 and min_redundancy_coverage: 92
+
+RemoveRedundancyBasedOnCI.py -f six_dnLibTEs_90_92.fa -c six_dnLibTEs_90_92.fa.classif -C Tedenovo_six_dnLibTEs_90_92.cfg -P six_dnLibTEs_90_92 > RemoveRRDC.txt
+
+8) Make a MySQL database with all of the classif files. This will include some TEs that are removed in the step above, but they can stay there and not be used
+
+mysql> CREATE TABLE six_dnLibTEs_90_92_consensus_classif LIKE six_dnLibTEs_consensus_classif;
+##Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT cd SELECT * FROM CS10_consensus_classif;
+##Query OK, 513 rows affected (0.01 sec)
+##Records: 513  Duplicates: 0  Warnings: 0
+mysql> INSERT six_dnLibTEs_90_92_consensus_classif SELECT * FROM Ptr_1CBFP_consensus_classif;
+##Query OK, 572 rows affected (0.07 sec)
+##Records: 572  Duplicates: 0  Warnings: 0
+
+
+ALL DONE! Ready to proceed with TEannot with your new non-redundant TE library
