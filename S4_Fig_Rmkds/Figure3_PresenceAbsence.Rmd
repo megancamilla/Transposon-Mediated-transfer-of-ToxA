@@ -1,0 +1,185 @@
+---
+title: "ToxApresence_absence Figure"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,tidy.opts=list(width.cutoff=80),tidy=TRUE)
+```
+
+Filtering REPET GFF files and making TE.DNAseg objects for plotting
+Note: If you want Rstudio to inherit the correct PATH (i.e. /anaconda/bin) you need to start RStudio from command line "open -a RStudio"
+```{bash}
+## Important chromosomes
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/
+
+##Make Geneious friendly gff files
+
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/CS10/CS10_TA_a0_GFF3chr
+cat CS10_Chromosome_08.gff3 |grep "CS10_TA_a0_REPET_TEs" | grep "match_part" | sed 's/ID=\(.*\);Parent=\(.*\);Target/ID=\2;Parent=\1;Target/' > CS10_Chromosome_08_edit.gff3
+
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/SN15/SN15_STA_a0_GFF3chr
+cat SN15_SOL_Chromosome_05.gff3 |grep "SN15_STA_a0_REPET_TEs" | grep "match_part" | sed 's/ID=\(.*\);Parent=\(.*\);Target/ID=\2;Parent=\1;Target/' > SN15_SOL_Chromosome_05_edit.gff3 
+
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/PTR/PTR_TA_a0_GFF3chr
+cat supercont1.4.gff3 |grep "PTR_TA_a0_REPET_TEs" | grep "match_part" | sed 's/ID=\(.*\);Parent=\(.*\);Target/ID=\2;Parent=\1;Target/' > supercont1.4_edit.gff3
+
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/CS27/CS27_TA_a0_GFF3chr
+cat CS27_Chromosome_08.gff3 | grep "CS27_TA_a0_REPET_TEs" |grep "match_part" | sed 's/ID=\(.*\);Parent=\(.*\);Target/ID=\2;Parent=\1;Target/' > CS27_Chromosome_08_edit.gff3
+
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/SN79_SOL/SN79_STA_a0_GFF3chr
+cat SN79_SOL_Chromosome_05.gff3 | grep "SN79_STA_a0_REPET_TEs" | grep "match_part" | sed 's/ID=\(.*\);Parent=\(.*\);Target/ID=\2;Parent=\1;Target/'> SN79_SOL_Chromosome_05_edit.gff3
+
+
+##Make TE.dnaseg files for plotting transposons
+## will attach header with following columns to match dna_segs object c(name,start,end,strand,col,gene_type)
+
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/CS10/CS10_TA_a0_GFF3chr
+cat /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/TE_Header.txt > /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/CS10_TEsegs.dnasegs
+
+cat CS10_Chromosome_08_edit.gff3 | awk -F "\t" '{print $1"\t"$4"\t"$5"\t"$7"\t""blue""\t""blue""\t""blocks"}' >> /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/CS10_TEsegs.dnasegs
+
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/SN15/SN15_STA_a0_GFF3chr
+cat /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/TE_Header.txt > /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/SN15_SOL_TEsegs.dnasegs
+
+cat SN15_SOL_Chromosome_05_edit.gff3 | awk -F "\t" '{print $1"\t" $4"\t"$5"\t"$7"\t""blue""\t""blue""\t""blocks"}' >> /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/SN15_SOL_TEsegs.dnasegs
+
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/PTR/PTR_TA_a0_GFF3chr
+cat /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/TE_Header.txt > /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/PTRs_TEsegs.dnasegs
+
+cat supercont1.4_edit.gff3 | awk -F "\t" '{print $1"\t" $4"\t"$5"\t"$7"\t""blue""\t""blue""\t""blocks"}' >> /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/PTRs_TEsegs.dnasegs
+
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/CS27/CS27_TA_a0_GFF3chr
+cat /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/TE_Header.txt > /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/CS27_TEsegs.dnasegs
+
+cat CS27_Chromosome_08_edit.gff3 | awk -F "\t" '{print $1"\t" $4"\t"$5"\t"$7"\t""blue""\t""blue""\t""blocks"}' >> /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/CS27_TEsegs.dnasegs
+
+cd /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Ben_REPET/REPET2/TEanno/SN79_SOL/SN79_STA_a0_GFF3chr
+cat /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/TE_Header.txt > /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/SN79_TEsegs.dnasegs
+
+cat SN79_SOL_Chromosome_05_edit.gff3 | awk -F "\t" '{print $1"\t" $4"\t"$5"\t"$7"\t""blue""\t""blue""\t""blocks"}' >> /Users/meganm/Dropbox\ \(Solomon\ lab\)/Movement_of_ToxA/Figure_ToxAPresenceAbsence/SN79_TEsegs.dnasegs
+
+```
+
+Generate Lastz+TRF filtered outputs (mimeo-map) into DNAcomp files for plotting
+Note:The orientation that you align the chromosomes will determine if "(+ + =1) or (+ - =1)" This is important to get the color the same for all alignments. Easiest thing is to make RC a chromosome if needed and re-do the alignments. 
+
+Exampe mimeo-map run:
+mimeo-map --afasta SN15_SOL_Chromosome_05.fasta --bfasta SN79_SOL_Chromosome_05.fasta --outfile SN15vsSN79_map --minIdt 60 --writeTRF
+
+Formated Mimeo output for import as a dnaseg object should have the following tab delim columns
+"start1  end1  start2  end2  strand  identity"
+
+```{r}
+## Import data for Plotting Chromosomes and their Synteny
+library(genoPlotR)
+setwd("~/Dropbox (Solomon lab)/Movement_of_ToxA/Figure_ToxAPresenceAbsence")
+
+
+## ToxA locations Keep these for Later and add to DNAseqs objects
+PtrToxA<-data.frame(name="ToxA",start=1442202,end=1453529,strand="+",col="red", fill="red",gene_type="blocks")
+
+CS10ToxA<-data.frame(name="ToxA", start=2029860, end=2043926,strand="+", col="red", fill="red",gene_type="blocks")
+
+SN15ToxA<-data.frame(name="ToxA",start=697480,end=708560,strand="+",col="red", fill="red",gene_type="blocks")
+
+
+```
+
+
+```{r, fig.height=3,fig.width=12}
+### Now import Transposons DNAseg object to plot
+
+setwd("~/Dropbox (Solomon lab)/Movement_of_ToxA/Figure_ToxAPresenceAbsence")
+## Combine ToxA seg and TE annotations
+
+### Bipolaris only plot
+CS10.TE.annot<-data.frame(read.delim("CS10_TEsegs.dnasegs", sep = "\t"))
+CS10.TE.annot<-rbind(CS10.TE.annot,CS10ToxA)
+CS10.TE.annot<-dna_seg(CS10.TE.annot)
+
+CS27.TE.annot<-data.frame(read.delim("CS27_TEsegs.dnasegs", sep = "\t"))
+CS27.TE.annot<-dna_seg(CS27.TE.annot)
+teonly<-list(CS10.TE.annot ,CS27.TE.annot)
+names(teonly)<- c("CS10 Chr_08", "CS27 Chr_08")
+
+Bipolar_comp<-read_comparison_from_tab("CS10vsCS27_chr8_map.dnacomp", header=T)
+Bipolar_comp$direction<-Bipolar_comp$strand
+
+plot_gene_map(dna_segs = teonly , comparisons = list(Bipolar_comp), gene_type = "side_blocks", dna_seg_scale= T, scale=F, global_color_scheme = c("identity", "auto","red_blue",0.7))
+
+
+
+SN15.TE.annot<-data.frame(read.delim("SN15_SOL_TEsegs.dnasegs", sep = "\t"))
+SN15.TE.annot<-rbind(SN15.TE.annot,SN15ToxA)
+SN15.TE.annot<-dna_seg(SN15.TE.annot)
+
+SN79.TE.annot<-try(read_dna_seg_from_tab("SN79_TEsegs.dnasegs", header=T))
+SNtes<-list(SN15.TE.annot, SN79.TE.annot)
+names(SNtes)<- c("SN15 Chr_05", "SN79 Chr_05")
+
+Pnod_comp<-read_comparison_from_tab("SN15vsSN79_map.dnacomp", header=T)
+Pnod_comp$direction<-Pnod_comp$strand
+
+plot_gene_map(dna_segs = SNtes , comparisons = list(Pnod_comp), gene_type = "side_blocks", dna_seg_scale= T, scale=F, global_color_scheme = c("identity", "auto","red_blue",0.7))
+
+PTRs.TE.annot<-data.frame(read.delim("PTRs_TEsegs.dnasegs", sep="\t"))
+PTRs.TE.annot<-rbind(PTRs.TE.annot, PtrToxA)
+PTRs.TE.annot<-dna_seg(PTRs.TE.annot)
+dummy.annot <-try(read_dna_seg_from_tab("Ptr_dummy.seg", header = F))
+ptrte<-list(PTRs.TE.annot,dummy.annot)
+names(ptrte)<-c("Ptr1C-BFP supercont1.4", "Ptr DW5 Coverage")
+Ptrxlims<-list(c(0,2787600))
+
+#plot_gene_map(dna_segs = list(Ptr.TE.annot) ,gene_type = "side_blocks", dna_seg_scale = T)
+plot_gene_map(dna_segs = ptrte ,gene_type = "side_blocks", dna_seg_scale = T)
+
+
+
+
+```
+
+```{r, fig.height=9,fig.width=12}
+### Plot all three graphs together and print to a PDF
+
+library(grid)
+
+cairo_pdf(paste0("Figure_X.pdf"), width = 12, height = 9)
+pushViewport(viewport(layout=grid.layout(3,1, heights=unit(c(1,1,1), rep("null",3))), name="Synteny between ToxA +/- Isolates"))
+## Panel A
+pushViewport(viewport(layout.pos.row = 1, name="panelA"))
+plot_gene_map(dna_segs = teonly , comparisons = list(Bipolar_comp), gene_type = "side_blocks", global_color_scheme = c("identity", "auto","red_blue",0.7),dna_seg_scale = T, scale=F, main = "A",main_pos = "left",plot_new = F)
+
+upViewport()
+## Panel B
+pushViewport(viewport(layout.pos.row = 2,name="panelB"))
+
+plot_gene_map(dna_segs = SNtes , comparisons = list(Pnod_comp), gene_type = "side_blocks", global_color_scheme = c("identity","auto","red_blue", 0.7), dna_seg_scale= T, scale=F, override_color_schemes = T,main="B", main_pos="left", plot_new=F)
+
+##Panel C
+upViewport()
+pushViewport(viewport(layout.pos.row = 3,name="panelC"))
+plot_gene_map(dna_segs = ptrte ,gene_type = "side_blocks", dna_seg_scale = T, scale=F,main = "C",main_pos = "left", plot_new = F)
+dev.off()
+```
+
+```{r, fig.height=2,fig.width=10}
+
+### Import feature counts accross 10kb windows
+###Note need to create new column which counts the average "coverage" accross these windows assumming
+### 150 bp reads
+library(ggplot2)
+RawCounts <- read.table("/Users/meganm/Dropbox (Solomon lab)/Movement_of_ToxA/Ptr_Mapped_Reads/DW5_coveragecount_10kb_1.4.txt", sep="\t", header=F)
+
+#Calculate coverage for each window
+RawCounts<-cbind(RawCounts,(RawCounts$V4*150)/10000)
+
+colnames(RawCounts)<- c("Chrom", "Start","Stop","Reads","Non-zero-bases", "length", "fractionnonzero","Coverage")
+
+cairo_pdf(paste0("FigureXC_readcov.pdf"), width = 11.5, height = 2)
+ggplot(RawCounts, aes(x=Start,y=Coverage))+geom_line(aes(col=fractionnonzero))+theme_classic()+coord_cartesian(xlim=c(0,2787645), expand = c(0,0))+scale_color_gradient(low="pink",high=" dark green")+theme(axis.line.x=element_blank(), axis.title.x =element_blank())+scale_x_continuous(breaks=seq(0,2787645,500000))
+dev.off()
+```
+
