@@ -1,0 +1,324 @@
+---
+title: "Figure2 Extent of HGT"
+author: "Megan McDonald"
+date: "14/11/2018"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = normalizePath("~/Dropbox (Solomon lab)/Movement_of_ToxA/Figure_ExtentofHGT/"))
+getwd()
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+Import repeat annotations from REPET pipeline
+Filter datsets to only the ToxA containing chromosomes
+
+```{r}
+
+## Reading in Data and formatting it for Filtering ####
+library(ggplot2)
+### Had a lot of issues getting this to work correctly, set the "root.dir" in the R setup chunk above
+#setwd("~/Dropbox (Solomon lab)/Movement_of_ToxA/Figure_ExtentofHGT/")
+getwd()
+
+## Set up chromosome segments
+CS10_Chr08<-data.frame(c(1),c(2108098))
+names(CS10_Chr08)<-c("start","stop")
+
+WAI2406_Chr01<-data.frame(c(1),c(4014556))
+names(WAI2406_Chr01)<-c("start","stop")
+
+WAI2411_tig17<-data.frame(c(1),c(776846))
+names(WAI2411_tig17)<-c("start","stop")
+### NOTE This Document was prepared with an older name of SN15, Chr05 is used in this document but the re-named version is Chr08, to match the names of Richards et. al. 2018
+SN15_Chr05<-data.frame(c(1),c(2046703))
+names(SN15_Chr05)<-c("start","stop")
+
+PTR_tig1.4<-data.frame(c(1),c(2787645))
+names(PTR_tig1.4)<-c("start","stop")
+
+## Import Tabdelim file with all ToxA chromosomes REPET annoations
+AllToxAtransposons<-read.delim("ToxA_Chromosome_Transposons.txt", header=T, stringsAsFactors=F)
+
+### Separate into Five different genome objects to plot separately ###
+
+## First get levels of Chromosomes ##
+unique(AllToxAtransposons$Chromosome)
+###[1] "CS10_Chromosome_08"                "WAI2406_try2_racon5_Chromosome_01" "WAI2411_contig_17"                
+###[4] "SN15_SOL_Chromosome_05"  "supercont1.4"  
+CS10_transposons<-AllToxAtransposons[AllToxAtransposons$Chromosome=="CS10_Chromosome_08",]
+CS10_transposons$Superfamily[is.na(CS10_transposons$Superfamily)]<-"None"
+
+WAI2406_transposons<-AllToxAtransposons[AllToxAtransposons$Chromosome=="WAI2406_try2_racon5_Chromosome_01",]
+WAI2406_transposons$Superfamily[is.na(WAI2406_transposons$Superfamily)]<-"None"
+
+WAI2411_transposons<-AllToxAtransposons[AllToxAtransposons$Chromosome=="WAI2411_contig_17",]
+WAI2411_transposons$Superfamily[is.na(WAI2411_transposons$Superfamily)]<-"None"
+
+SN15_transposons<-AllToxAtransposons[AllToxAtransposons$Chromosome=="SN15_SOL_Chromosome_05",]
+SN15_transposons$Superfamily[is.na(SN15_transposons$Superfamily)]<-"None"
+
+PTR_transposons<-AllToxAtransposons[AllToxAtransposons$Chromosome=="supercont1.4",]
+PTR_transposons$Superfamily[is.na(PTR_transposons$Superfamily)]<-"None"
+
+```
+
+#Make objects for the xlim coord_cartesian
+```{r}
+CS10limits<-c(1990000,2090000)
+WAI2411limits<-c(685000,776846)
+WAI2406limits<-c(1384000,1484000)
+SN15limits<-c(665000,765000)
+PTRlimits<-c(1390000,1490000)
+
+CS10breaks<-seq(1990000,2090000,20000)
+WAI2411breaks<-seq(685000,776846,20000)
+WAI2406breaks<-seq(1384000,1484000,20000)
+SN15breaks<-seq(665000,765000,20000)
+PTRbreaks<-seq(1390000,1490000,20000)
+
+CS10_ChromPlot<-ggplot(CS10_Chr08, aes(x=start,y=0,xend=stop,yend=0))+geom_segment(size=1)+ 
+  coord_cartesian(xlim=CS10limits,ylim = c(-0.02,0.02))+scale_x_continuous(breaks = CS10breaks)+
+  geom_segment(data=CS10_transposons, aes(x=begin,y=0,xend=end,yend=0, color=Superfamily), size=5)+
+  scale_color_manual(values=c('#a6cee3','#1f78b4','#b2df8a','#33a02c',
+                              '#fb9a99','#fdbf6f','#ff7f00','#cab2d6','#ffff99','#6a3d9a','#e31a1c'))+
+  labs(title = "CS10_Chr08", tag="A")+
+  theme(axis.line.y=element_blank(),
+      #axis.text.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.title.y=element_blank(),
+      axis.title.x=element_blank(),
+      panel.background=element_blank(),
+      plot.background=element_blank())
+
+CS10_ChromPlot
+ggsave("CS10test.pdf",width = 12,height = 2, dpi=300)
+
+```
+Plot Other Bipolaris
+```{r}
+
+WAI2406_ChromPlot<-ggplot(WAI2406_Chr01, aes(x=start,y=0,xend=stop,yend=0))+geom_segment(size=1)+ 
+  coord_cartesian(xlim=WAI2406limits,ylim = c(-0.02,0.02))+scale_x_reverse(breaks = WAI2406breaks)+
+  geom_segment(data=WAI2406_transposons, aes(x=begin,y=0,xend=end,yend=0, color=Superfamily), size=5)+
+  scale_color_manual(values=c('#a6cee3','#1f78b4','#b2df8a','#33a02c',
+                              '#fb9a99','#ff7f00','#cab2d6','#ffff99','#6a3d9a','#e31a1c'))+
+  labs(title = "WAI2406_Chr01", tag="B")+
+  theme(axis.line.y=element_blank(),
+      #axis.text.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.title.y=element_blank(),
+      axis.title.x=element_blank(),
+      panel.background=element_blank(),
+      plot.background=element_blank())
+
+WAI2406_ChromPlot
+```
+```{r}
+
+WAI2411_ChromPlot<-ggplot(WAI2411_tig17, aes(x=start,y=0,xend=stop,yend=0))+geom_segment(size=1)+ 
+  coord_cartesian(xlim=WAI2411limits,ylim = c(-0.02,0.02))+scale_x_continuous(breaks = WAI2411breaks)+
+  geom_segment(data=WAI2411_transposons, aes(x=begin,y=0,xend=end,yend=0, color=Superfamily), size=5)+
+  scale_color_manual(values=c('#a6cee3','#1f78b4','#b2df8a','#33a02c',
+                              '#fb9a99','#fdbf6f','#ff7f00','#cab2d6','#ffff99','#6a3d9a','#e31a1c'))+
+  labs(title = "WAI2411_tig17", tag="C")+
+  theme(axis.line.y=element_blank(),
+      #axis.text.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.title.y=element_blank(),
+      axis.title.x=element_blank(),
+      panel.background=element_blank(),
+      plot.background=element_blank())
+
+WAI2411_ChromPlot
+```
+
+```{r}
+SN15_ChromPlot<-ggplot(SN15_Chr05, aes(x=start,y=0,xend=stop,yend=0))+geom_segment(size=1)+ 
+  coord_cartesian(xlim=SN15limits,ylim = c(-0.02,0.02))+scale_x_continuous(breaks = SN15breaks)+
+  geom_segment(data=SN15_transposons, aes(x=begin,y=0,xend=end,yend=0, color=Superfamily), size=5)+
+  scale_color_manual(values=c('#a6cee3','#1f78b4','#b2df8a','#33a02c',
+                              '#ff7f00','#6a3d9a','#e31a1c'))+
+  labs(title = "SN15", tag="D")+
+  theme(axis.line.y=element_blank(),
+      #axis.text.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.title.y=element_blank(),
+      axis.title.x=element_blank(),
+      panel.background=element_blank(),
+      plot.background=element_blank())
+
+SN15_ChromPlot
+```
+
+```{r}
+PTR_ChromPlot<-ggplot(PTR_tig1.4, aes(x=start,y=0,xend=stop,yend=0))+geom_segment(size=1)+ 
+  coord_cartesian(xlim=PTRlimits,ylim = c(-0.02,0.02))+scale_x_reverse(breaks=PTRbreaks)+
+  geom_segment(data=PTR_transposons, aes(x=begin,y=0,xend=end,yend=0, color=Superfamily), size=5)+
+  scale_color_manual(values=c('#a6cee3','#1f78b4','#b2df8a','#33a02c',
+                              '#ff7f00','#cab2d6','#6a3d9a','#e31a1c'))+
+  labs(title = "Ptr-1C-BFP supercontig1.4", tag="E")+
+  theme(axis.line.y=element_blank(),
+      #axis.text.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.title.y=element_blank(),
+      axis.title.x=element_blank(),
+      panel.background=element_blank(),
+      plot.background=element_blank())
+
+PTR_ChromPlot
+```
+
+```{r, fig.height=12,fig.width=12}
+library(cowplot)
+
+Fig2B<-plot_grid(CS10_ChromPlot,SN15_ChromPlot,PTR_ChromPlot, align="v", nrow=3)
+Fig2B
+ggsave("RepeatIslands_3speciesonly.pdf", Fig2B, width = 32, height =24, units=c("cm"),dpi=600 )
+```
+
+
+## Plot SN15 repeat island just to see what it looks like
+```{r, fig.height=4,fig.width=12}
+
+PTR_HGTs_hits<-read.delim("~/Dropbox (Solomon lab)/Movement_of_ToxA/Figure_ExtentofHGT/HGT_PTR_SN15_blastSummary.txt", header=T)
+head(PTR_HGTs_hits)
+SN15island_limit<-c(330000,685000)
+SN15island_break<-seq(330000,685000, 50000)
+
+
+SN15_Island<-ggplot(SN15_Chr05, aes(x=start,y=0,xend=stop,yend=0))+geom_segment(size=1)+ 
+  coord_cartesian(xlim=SN15island_limit)+scale_x_continuous(breaks = SN15island_break)+
+  geom_segment(data=SN15_transposons, aes(x=begin,xend=end, y=0,yend=0, color=Superfamily), size=5)+
+  scale_color_manual(values=c('#a6cee3','#1f78b4','#b2df8a','#33a02c',
+                              '#ff7f00','#6a3d9a','#e31a1c'))+
+  geom_segment(data=PTR_HGTs_hits, aes(x=Manual_begin, xend=Manual_end, y=0.01,yend=0.01, alpha=Avg_Identity),color="Brown",size=5)+scale_alpha_continuous(limits=c(40,100))+
+  theme(axis.line.y=element_blank(),
+      #axis.text.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.title.y=element_blank(),
+      axis.title.x=element_blank(),
+      panel.background=element_blank(),
+      plot.background=element_blank())
+
+SN15_Island
+
+
+
+```
+
+## Plot Ptr HGT regions that are spread out in Pnod
+```{r,fig.height=4,fig.width=12}
+PTR_HGTs_orig<-read.delim("~/Dropbox (Solomon lab)/Movement_of_ToxA/Figure_ExtentofHGT/HGT_PTRorig_locations.txt", header=T)
+PTR_Islandlimits<-c(1450000,1550000)
+PTR_Islandbreaks<-seq(1450000,1550000,25000)
+
+PTR_HGT_Island<-ggplot(PTR_tig1.4, aes(x=start,y=0,xend=stop,yend=0))+geom_segment(size=1)+ 
+  coord_cartesian(xlim=PTR_Islandlimits,ylim = c(-0.04,0.04))+scale_x_reverse(breaks=PTR_Islandbreaks)+
+  geom_segment(data=PTR_transposons, aes(x=begin,y=0,xend=end,yend=0, color=Superfamily), size=5)+
+  scale_color_manual(values=c('#a6cee3','#1f78b4','#b2df8a','#33a02c',
+                              '#ff7f00','#cab2d6','#6a3d9a','#e31a1c'))+
+  labs(title = "Ptr-1C-BFP supercontig1.4")+
+  geom_segment(data=PTR_HGTs_orig, aes(x=Manual_begin, xend=Manual_end, y=Height, yend=Height, alpha=Avg_Identity),color="Brown",size=5)+scale_alpha_continuous(limits=c(40,100))+
+  theme(axis.line.y=element_blank(),
+  #    axis.line.x=element_blank(),
+ #     axis.text.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+   #   axis.ticks.x=element_blank(),
+      axis.title.y=element_blank(),
+      axis.title.x=element_blank(),
+      legend.position = "none",
+      panel.background=element_blank(),
+      plot.background=element_blank())
+
+PTR_HGT_Island
+
+```
+
+```{r, fig.height=4, fig.width=12}
+Fig2C<-ggdraw()+draw_plot(SN15_Island + theme(legend.justification = "bottom"))+draw_plot_label(c("SN15_Chr08"))
+Fig2C
+Fig2D<-ggdraw()+draw_plot(PTR_HGT_Island + theme(legend.justification = "bottom"))
+Fig2D
+
+ggsave("ExtentofHGT_Pnod.pdf", Fig2C, width = 32, height =16, units=c("cm"),dpi=600 )
+
+ggsave("ExtentofHGT_PTR.pdf", Fig2D, width = 24, height =8, units=c("cm"),dpi=600 )
+
+```
+```{r}
+
+## Draw transposons according to species of origin
+
+CS10_species<-ggplot(CS10_Chr08, aes(x=start,y=0,xend=stop,yend=0))+geom_segment(size=1)+ 
+  coord_cartesian(xlim=c(1900000,2000000),ylim = c(-0.02,0.02))+
+  geom_segment(data=CS10_transposons, aes(x=begin,y=0,xend=end,yend=0, color=Species_Origin), size=5)+
+  labs(title = "CS10_Chr08", tag="A")+
+  theme(axis.line.y=element_blank(),
+      axis.text.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.title.y=element_blank(),
+      axis.title.x=element_blank(),
+      panel.background=element_blank(),
+      plot.background=element_blank())
+
+CS10_species
+ggsave("CS10test.pdf",width = 12,height = 2, dpi=300)
+```
+
+```{r}
+
+PTR_HGT_species<-ggplot(PTR_tig1.4, aes(x=start,y=0,xend=stop,yend=0))+geom_segment(size=1)+ 
+  coord_cartesian(xlim=c(1400000,1600000),ylim = c(-0.04,0.04))+scale_x_reverse()+
+  geom_segment(data=PTR_transposons, aes(x=begin,y=0,xend=end,yend=0, color=Species_Origin), size=5)+
+  labs(title = "Ptr-1C-BFP supercontig1.4")+
+   geom_segment(data=PTR_HGTs_orig, aes(x=Manual_begin, xend=Manual_end, y=Height, yend=Height, alpha=Avg_Identity),color="Brown",size=5)+scale_alpha_continuous(limits=c(40,100))+
+   theme(axis.line.y=element_blank(),
+  #    axis.line.x=element_blank(),
+ #     axis.text.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+   #   axis.ticks.x=element_blank(),
+      axis.title.y=element_blank(),
+      axis.title.x=element_blank(),
+      panel.background=element_blank(),
+      plot.background=element_blank())
+
+PTR_HGT_species
+
+```
+
+```{r}
+SN15_species<-ggplot(SN15_Chr05, aes(x=start,y=0,xend=stop,yend=0))+geom_segment(size=1)+ 
+  coord_cartesian(xlim=c(600000,800000),ylim = c(-0.02,0.02))+
+  geom_segment(data=SN15_transposons, aes(x=begin,y=0,xend=end,yend=0, color=Species_Origin), size=5)+
+  geom_segment(data=PTR_HGTs_hits, aes(x=Manual_begin, xend=Manual_end, y=0.01,yend=0.01, alpha=Avg_Identity),color="Brown",size=5)+scale_alpha_continuous(limits=c(40,100))+
+  labs(title = "SN15", tag="D")+
+  theme(axis.line.y=element_blank(),
+      #axis.text.x=element_blank(),
+      axis.text.y=element_blank(),
+      axis.ticks.y=element_blank(),
+      axis.title.y=element_blank(),
+      axis.title.x=element_blank(),
+      panel.background=element_blank(),
+      plot.background=element_blank())
+SN15_species
+```
+
