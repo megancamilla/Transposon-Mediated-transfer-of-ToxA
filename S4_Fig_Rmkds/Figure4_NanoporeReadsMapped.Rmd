@@ -1,0 +1,156 @@
+---
+title: "Mapping MinIon Reads to Assemblies - Figure 4"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# NOTE
+Due to wierd markdown stuff that I don't fully understand the `setwd()` won't work unless you save the markdown document in the folder below. Rmkd automatically makes the folder where the mkd document is saved the working directory.
+
+If you want to change this you need to set it up in the R setup chunk at the very top of the document.
+
+Something like this:
+
+"{r setup}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::opts_knit$set(root.dir = normalizePath("Desired/working/directory/here"))
+
+getwd()"
+
+(but I find it's just easiest to save the mkd document in the folder where your data is...)
+
+# Set up libraries and working directory
+```{r}
+library(ggplot2)
+library(scales)
+library(cowplot)
+setwd("~/Dropbox (Solomon lab)/Movement_of_ToxA/Figure_ConfirmTranslocations")
+getwd()
+```
+
+# Import Data
+```{r}
+PAFhead<-c("query",	"Q_length",	"Q_start",	"Q_end",	"Q_strand",	"Target",	"T_length",	"T_start",	"T_end",	"N_res_matches",	"Alignment_length",	"Mapping_quality")
+## WAI2406 mapped to itself, filter reads with mapping quality <50 and alignments less than 10000bp
+WAI2406_racon<-read.delim("WAI2406_Chr01racon5.txt", sep="\t", header=T)
+WAI2406_racon<-WAI2406_racon[WAI2406_racon$Mapping_quality>=50,]
+WAI2406_racon<-WAI2406_racon[WAI2406_racon$Alignment_length>=10000,]
+
+
+## WAI2406 mapped to CS10, filter reads with mapping quality <50 and alignments less than 10000bp
+WAI2406toCS10<-read.delim("WAI2406reads_to_CS10.paf", sep="\t", header=T)
+WAI2406toCS10<-WAI2406toCS10[,1:12]
+WAI2406toCS10<-WAI2406toCS10[WAI2406toCS10$Target=="CS10_Chromosome_08",]
+WAI2406toCS10<-WAI2406toCS10[WAI2406toCS10$Mapping_quality>=50,]
+WAI2406toCS10<-WAI2406toCS10[WAI2406toCS10$Alignment_length>=10000,]
+
+### WAI2411 Aligned to itself , filter reads with mapping quality <50 and alignments less than 5000bp
+WAI2411_toSelf<-read.delim("WAI2411_try2_racon_5.paf", sep="\t", header=T)
+WAI2411_toSelf<-WAI2411_toSelf<-WAI2411_toSelf[,1:12]
+WAI2411_toSelf<-WAI2411_toSelf[WAI2411_toSelf$Mapping_quality>=50,]
+WAI2411_toSelf<-WAI2411_toSelf[WAI2411_toSelf$Alignment_length>=5000,]
+WAI2411_toSelf<-WAI2411_toSelf[WAI2411_toSelf$Target=="WAI2411_contig_17",]
+
+## WAI2411 mapped to CS10, filter reads with mapping quality <50 and alignments less than 5000bp
+WAI2411_toCS10<-read.delim("WAI2411_to_CS10.paf", sep="\t", header=T)
+WAI2411_toCS10<-WAI2411_toCS10[,1:12]
+WAI2411_toCS10<-WAI2411_toCS10[WAI2411_toCS10$Mapping_quality>=50,]
+WAI2411_toCS10<-WAI2411_toCS10[WAI2411_toCS10$Alignment_length>=5000,]
+WAI2411_toCS10<-WAI2411_toCS10[WAI2411_toCS10$Target=="CS10_Chromosome_08",]
+
+```
+# Add columns to data
+Percent Identity of Aligned read (**Identity**), Slope of Aligned Read (**Slope**)
+
+```{r}
+### Extra Columns for WAI2406 aligned to itself Chr_01 ###
+perc_aligned1<-c(round(((WAI2406_racon$Q_end-WAI2406_racon$Q_start)/WAI2406_racon$Q_length),digits=3))
+slope1<-c(round(((WAI2406_racon$Q_end-WAI2406_racon$Q_start)/(WAI2406_racon$T_end-WAI2406_racon$T_start)),digits=2))
+identity1<-c(round((WAI2406_racon$N_res_matches/(WAI2406_racon$T_end-WAI2406_racon$T_start)),digits=2))
+WAI2406_racon<-cbind(WAI2406_racon,perc_aligned1,slope1,identity1)
+
+### Extra Columns for WAI2406 aligned to CS10 Chr_08 ###
+perc_aligned2<-c(round(((WAI2406toCS10$Q_end-WAI2406toCS10$Q_start)/WAI2406toCS10$Q_length),digits=3))
+slope2<-c(round(((WAI2406toCS10$Q_end-WAI2406toCS10$Q_start)/(WAI2406toCS10$T_end-WAI2406toCS10$T_start)),digits=2))
+identity2<-c(round((WAI2406toCS10$N_res_matches/(WAI2406toCS10$T_end-WAI2406toCS10$T_start)),digits=2))
+WAI2406toCS10<-cbind(WAI2406toCS10,perc_aligned2,slope2,identity2)
+
+## Extra Columns for WAI2411 aligned to itsef, contig_17
+perc_aligned3<-c(round(((WAI2411_toSelf$Q_end-WAI2411_toSelf$Q_start)/WAI2411_toSelf$Q_length),digits=3))
+slope3<-c(round(((WAI2411_toSelf$Q_end-WAI2411_toSelf$Q_start)/(WAI2411_toSelf$T_end-WAI2411_toSelf$T_start)),digits=3))
+identity3<-c(WAI2411_toSelf$N_res_matches/WAI2411_toSelf$Alignment_length)
+WAI2411_toSelf<-cbind(WAI2411_toSelf,perc_aligned3,slope3,identity3)
+
+## Extra Columns for WAI2411 aligned to CS10 Chr_08
+perc_aligned4<-c(round(((WAI2411_toCS10$Q_end-WAI2411_toCS10$Q_start)/WAI2411_toCS10$Q_length),digits=3))
+slope4<-c(round(((WAI2411_toCS10$Q_end-WAI2411_toCS10$Q_start)/(WAI2411_toCS10$T_end-WAI2411_toCS10$T_start)),digits=3))
+identity4<-c(WAI2411_toCS10$N_res_matches/WAI2411_toCS10$Alignment_length)
+WAI2411_toCS10<-cbind(WAI2411_toCS10,perc_aligned4,slope4,identity4)
+
+
+```
+## Plot WAI2406 Aligned to Self and CS10
+```{r}
+## Set up Breaks for Slope colors
+breakList<-seq(0.6,1.6,by=0.2)
+IdentityBreaks<-seq(0,1,by=0.2)
+## Set up ToxA region on Chr1 in isolate WAI2411 for coloring, these coordinates were pre-detirmined using MAUVE ###
+ToxA_block<-data.frame(xpos=c(1434925,1449002),y1=c(0,0),y2=c(40000,40000))
+## Set up WAI2411 Chr1 translocation for coloring, these coordinates were pre-detirmined using MAUVE ###
+Translocation_block1<-data.frame(x1pos=c(1407479,1498830))
+Translocation_block2<-data.frame(x2pos=c(1498831,1591597))
+
+### plot Read Color based on Alignment Slope ####
+WAI2406slope<-ggplot(ToxA_block,aes(x=xpos,ymin=0,ymax=120000))+geom_ribbon(color="red",size=0.2,fill="red",alpha=.3)+geom_ribbon(data=Translocation_block1,aes(x=x1pos,ymin=0,ymax=120000),color="blue",size=0.2,fill="blue",alpha=0.1)+geom_ribbon(data=Translocation_block2,aes(x=x2pos,ymin=0,ymax=120000),color="blue",size=0.2,fill="blue",alpha=0.1)+geom_segment(data=WAI2406_racon,aes(x=T_start,xend=T_end,y=Q_start,yend=Q_end,color=slope1,linetype=Q_strand),size=0.3)+scale_colour_gradient2(low ="blue",mid = "lightgreen",high = "red",midpoint=1, name="Slope",breaks=breakList,limits=c(0.5,1.5))+coord_cartesian(xlim = c(1390000,1620000),ylim = c(0,100000))+xlab("Position Aligned to WAI2406 Chr01 (bp)")+ylab("Position of Alignment Start on Read (bp)")+geom_abline(intercept=-1400000,slope=1, color="black",size=1,linetype="dashed")
+WAI2406slope
+
+
+
+
+### Plot WAI2406 aligned to CS10 with Read Color based on Slope #####
+Chr08_toxA<-data.frame(xpos=c(2029863,2043923))
+Chr08_TransRegion1<-data.frame(xpos2=c(1875316,1967969))
+Chr08_TransRegion2<-data.frame(xpos2=c(1974030,2071323))
+Chr08_plot<-ggplot(Chr08_toxA,aes())
+breakList<-seq(0.6,1.6,by=0.2)
+IdentityBreaks<-seq(0,1,by=0.2)
+
+WAI2406_CS10slope <-ggplot(Chr08_toxA, aes(x=xpos,y=100000))+geom_area(alpha=0.3,fill="red",color="red",size=0.2)+geom_ribbon(data=Chr08_TransRegion1,aes(x=xpos2,ymin=0,ymax=100000),color="blue",size=0.2,fill="blue",alpha=0.1)+geom_ribbon(data=Chr08_TransRegion2,aes(x=xpos2,ymin=0,ymax=100000),color="blue",size=0.2,fill="blue",alpha=0.1)+geom_segment(data=WAI2406toCS10, aes(x=T_start,xend=T_end,y=Q_start, yend=Q_end,color=slope2, linetype=Q_strand),size=0.3)+scale_colour_gradient2(low ="blue",mid = "lightgreen",high = "red",midpoint=1, name="Slope",breaks=breakList,limits=c(0.5,1.5))+coord_cartesian(xlim=c(1790000,2100000),ylim = c(0,100000))+xlab("Position Aligned to CS10 Chr08 (bp)")+ylab("Position of Alignment Start on Read (bp)")+geom_abline(intercept=-1800000,slope=1, color="black",size=1, linetype="dashed")
+WAI2406_CS10slope
+
+
+```
+
+## Plot WAI2411 Aligned to Self and CS10
+```{r}
+###WAI2411 to SELF Color by Slope ###
+tig17_toxA<-data.frame(xpos=c(728980,743052))
+
+##Plot WAI2411 Aligned to self by Slope
+WAI2411_selfslope<-ggplot(tig17_toxA, aes(x=xpos,y=100000))+geom_area(alpha=0.1,fill="red",color="red",size=0.2)+geom_segment(data=WAI2411_toSelf, aes(x=T_start,xend=T_end,y=Q_start, yend=Q_end,color=slope3, linetype=Q_strand),size=0.3)+scale_colour_gradient2(low ="blue",mid = "lightgreen",high = "red",midpoint=1, name="Slope",breaks=breakList,limits=c(0.5,1.5))+xlab("Position Aligned WAI2411 tig17 (bp)")+ylab("Position of Alignment Start on Read (bp)")+coord_cartesian(xlim = c(610000,760000),ylim = c(0,100000))+ geom_abline(intercept=-710000,slope=1, color="black",size=1,linetype="dashed")
+WAI2411_selfslope
+
+
+##Plot WAI2411 Aligned to CS10 by Slope
+WAI2411_toCS10slope<-ggplot(Chr08_toxA, aes(x=xpos,y=100000))+geom_area(alpha=0.1,fill="red",color="red",size=0.2)+geom_segment(data=WAI2411_toCS10, aes(x=T_start,xend=T_end,y=Q_start, yend=Q_end,color=slope4, linetype=Q_strand),size=0.3)+scale_colour_gradient2(low ="blue",mid = "lightgreen",high = "red",midpoint=1, name="Slope",breaks=breakList,limits=c(0.5,1.5))+xlab("Position Aligned to CS10 Chr08 (bp)")+ylab("Position of Alignment Start on Read (bp)")+coord_cartesian(xlim = c(1990000,2075000),ylim = c(0,100000))+ geom_abline(intercept=-1990000,slope=1, color="black",size=1,linetype="dashed")
+WAI2411_toCS10slope
+
+
+```
+
+
+## All together now
+```{r, fig.height=8, fig.width=12}
+## Use cowplot to put 4 figures together based on SLOPE
+
+Fig4slope<-plot_grid(WAI2406slope,WAI2411_selfslope,WAI2406_CS10slope,WAI2411_toCS10slope,ncol=2,align="v",labels=c("A","B","C","D"))
+Fig4slope
+ggsave("Fig4_slope.pdf", Fig4slope, width = 40, height =30, units=c("cm"),dpi=600 )
+
+```
+
