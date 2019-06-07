@@ -1,0 +1,2 @@
+TE	length	covg	frags	fullLgthFrags	copies	fullLgthCopies	meanId	sdId	minId	q25Id	medId	q75Id	maxId	meanLgth	sdLgth	minLgth	q25Lgth	medLgth	q75Lgth	maxLgth	meanLgthPerc	sdLgthPerc	minLgthPerc	q25LgthPerc	medLgthPerc	q75LgthPerc	maxLgthPerc
+MOLLY_SN:ClassII:TIR:Tc1-Mariner	1862	88682	157	15	114	22	46.98	11.12	30.73	35.06	51.25	55.13	72.09	778.27	632.31	27	245.00	576.00	1103.00	1884	41.80	33.96	1.45	13.16	30.93	59.24	101.18

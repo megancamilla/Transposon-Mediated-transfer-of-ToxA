@@ -1,0 +1,319 @@
+/home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-13 / 18:30:41
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 1
+prepare the input files and load them in MySQL tables
+Beginning Blaster (version 2.25)
+Thursday 13 September  18:31:03 AEST 2018
+Thursday 13 September  18:31:07 AEST 2018
+End Blaster (version 2.25)
+step 1 finished successfully
+
+local date/time = 2018-9-13 / 18:31:7
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-13 / 18:31:7
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 2
+use BLR to align the TE sequences on the chunks
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S2_BLR' (2018-09-13 18:31:07)
+waiting for 43 job(s) with groupid 'SN79_STA_a0_TEannot_S2_BLR' (2018-09-13 18:31:09)
+all jobs with groupid 'SN79_STA_a0_TEannot_S2_BLR' are finished (2018-09-13 20:03:58)
+execution time of all jobs (seconds): 1522.573450
+execution time per job: n=43 mean=35.409 var=92.698 sd=9.628 min=23.747 med=35.925 max=60.034
+step 2 finished successfully
+
+local date/time = 2018-9-13 / 20:3:58
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-13 / 20:3:58
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 2
+use CEN to align the TE sequences on the chunks
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S2_CEN' (2018-09-13 20:03:58)
+waiting for 43 job(s) with groupid 'SN79_STA_a0_TEannot_S2_CEN' (2018-09-13 20:04:00)
+all jobs with groupid 'SN79_STA_a0_TEannot_S2_CEN' are finished (2018-09-13 21:38:40)
+execution time of all jobs (seconds): 13315.859781
+execution time per job: n=43 mean=309.671 var=71526.482 sd=267.444 min=7.081 med=314.835 max=952.658
+step 2 finished successfully
+
+local date/time = 2018-9-13 / 21:38:40
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-13 / 21:38:40
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 2
+use RM to align the TE sequences on the chunks
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S2_RM' (2018-09-13 21:38:40)
+waiting for 43 job(s) with groupid 'SN79_STA_a0_TEannot_S2_RM' (2018-09-13 21:38:42)
+all jobs with groupid 'SN79_STA_a0_TEannot_S2_RM' are finished (2018-09-13 22:21:15)
+execution time of all jobs (seconds): 3638.883858
+execution time per job: n=43 mean=84.625 var=259.713 sd=16.116 min=64.532 med=80.841 max=126.746
+step 2 finished successfully
+
+local date/time = 2018-9-13 / 22:21:15
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-13 / 22:21:15
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 2
+use BLR to align the TE sequences on the randomized chunks
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S2_BLR_rnd' (2018-09-13 22:21:15)
+waiting for 43 job(s) with groupid 'SN79_STA_a0_TEannot_S2_BLR_rnd' (2018-09-13 22:21:17)
+all jobs with groupid 'SN79_STA_a0_TEannot_S2_BLR_rnd' are finished (2018-09-13 22:31:22)
+execution time of all jobs (seconds): 1078.710922
+execution time per job: n=43 mean=25.086 var=5.224 sd=2.286 min=21.927 med=24.419 max=30.463
+step 2 finished successfully
+
+local date/time = 2018-9-13 / 22:31:22
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-13 / 22:31:22
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 2
+use CEN to align the TE sequences on the randomized chunks
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S2_CEN_rnd' (2018-09-13 22:31:22)
+waiting for 43 job(s) with groupid 'SN79_STA_a0_TEannot_S2_CEN_rnd' (2018-09-13 22:31:24)
+all jobs with groupid 'SN79_STA_a0_TEannot_S2_CEN_rnd' are finished (2018-09-13 22:35:10)
+execution time of all jobs (seconds): 287.569426
+execution time per job: n=43 mean=6.688 var=0.890 sd=0.943 min=5.487 med=6.466 max=10.147
+step 2 finished successfully
+
+local date/time = 2018-9-13 / 22:35:10
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-13 / 22:35:10
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 2
+use RM to align the TE sequences on the randomized chunks
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S2_RM_rnd' (2018-09-13 22:35:10)
+waiting for 43 job(s) with groupid 'SN79_STA_a0_TEannot_S2_RM_rnd' (2018-09-13 22:35:12)
+all jobs with groupid 'SN79_STA_a0_TEannot_S2_RM_rnd' are finished (2018-09-13 22:43:12)
+execution time of all jobs (seconds): 2896.736865
+execution time per job: n=43 mean=67.366 var=23.101 sd=4.806 min=60.114 med=65.598 max=77.096
+step 2 finished successfully
+
+local date/time = 2018-9-13 / 22:43:12
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-13 / 22:43:12
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 3
+filter the real HSPs with the random HSPs and combine them
+
+* filter the 'align' files according to the threshold
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_step3_FilterAlign' (2018-09-13 22:43:12)
+waiting for 3 job(s) with groupid 'SN79_STA_a0_TEannot_step3_FilterAlign' (2018-09-13 22:43:12)
+all jobs with groupid 'SN79_STA_a0_TEannot_step3_FilterAlign' are finished (2018-09-13 22:43:27)
+execution time of all jobs (seconds): 5.454861
+execution time per job: n=3 mean=1.818 var=0.112 sd=0.334 min=1.622 med=1.629 max=2.204
+
+* concatenate chunk by chunk the filtered 'align' files from each alignment program
+
+* join the matches with Matcher
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S3_Matcher' (2018-09-13 22:43:30)
+waiting for 43 job(s) with groupid 'SN79_STA_a0_TEannot_S3_Matcher' (2018-09-13 22:43:32)
+all jobs with groupid 'SN79_STA_a0_TEannot_S3_Matcher' are finished (2018-09-13 22:44:47)
+execution time of all jobs (seconds): 19.194158
+execution time per job: n=43 mean=0.446 var=0.318 sd=0.564 min=0.016 med=0.280 max=3.111
+
+* filter and format data
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_step3_RetrieveInitHeaders_ConvChkToChr' (2018-09-13 22:44:47)
+waiting for 1 job(s) with groupid 'SN79_STA_a0_TEannot_step3_RetrieveInitHeaders_ConvChkToChr' (2018-09-13 22:44:47)
+execution time per job: n=1 mean=0.822 var=0.000 sd=0.000 min=0.822 med=0.822 max=0.822
+step 3 finished successfully
+
+local date/time = 2018-9-13 / 22:50:13
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-13 / 22:50:13
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 6
+Beginning Blaster (version 2.25)
+Thursday 13 September  22:50:17 AEST 2018
+Selecting NCBI Blastplus
+
+
+Building a new DB, current time: 09/13/2018 22:51:20
+New DB name:   /home/benjamin/Megan/REPET2/TEannot/SN79_SOL/SN79_STA_a0_db/repbase20.05_ntSeq_cleaned_TE.fa_cut
+New DB title:  repbase20.05_ntSeq_cleaned_TE.fa_cut
+Sequence type: Nucleotide
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 38960 sequences in 2.40127 seconds.
+Thursday 13 September  22:51:22 AEST 2018
+End Blaster (version 2.25)
+
+align 'repbase20.05_ntSeq_cleaned_TE.fa' and the chunks via Blaster with tblastx
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S6_tblastx' (2018-09-13 22:51:22)
+waiting for 43 job(s) with groupid 'SN79_STA_a0_TEannot_S6_tblastx' (2018-09-13 22:51:24)
+all jobs with groupid 'SN79_STA_a0_TEannot_S6_tblastx' are finished (2018-09-14 02:23:12)
+execution time of all jobs (seconds): 110199.640651
+execution time per job: n=43 mean=2562.782 var=46713.877 sd=216.134 min=2334.831 med=2454.527 max=3010.474
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S6_convChunk2Chr' (2018-09-14 02:23:13)
+waiting for 1 job(s) with groupid 'SN79_STA_a0_TEannot_S6_convChunk2Chr' (2018-09-14 02:23:13)
+execution time per job: n=1 mean=0.631 var=0.000 sd=0.000 min=0.631 med=0.631 max=0.631
+step 6 finished successfully
+
+local date/time = 2018-9-14 / 4:40:30
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-14 / 4:40:30
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 6
+Beginning Blaster (version 2.25)
+Friday 14 September  04:40:31 AEST 2018
+Selecting NCBI Blastplus
+
+
+Building a new DB, current time: 09/14/2018 04:40:44
+New DB name:   /home/benjamin/Megan/REPET2/TEannot/SN79_SOL/SN79_STA_a0_db/repbase20.05_aaSeq_cleaned_TE.fa_cut
+New DB title:  repbase20.05_aaSeq_cleaned_TE.fa_cut
+Sequence type: Protein
+Keep MBits: T
+Maximum file size: 1000000000B
+Adding sequences from FASTA; added 25682 sequences in 0.978634 seconds.
+Friday 14 September  04:40:45 AEST 2018
+End Blaster (version 2.25)
+
+align 'repbase20.05_aaSeq_cleaned_TE.fa' and the chunks via Blaster with blastx
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S6_blastx' (2018-09-14 04:40:45)
+waiting for 43 job(s) with groupid 'SN79_STA_a0_TEannot_S6_blastx' (2018-09-14 04:40:47)
+all jobs with groupid 'SN79_STA_a0_TEannot_S6_blastx' are finished (2018-09-14 05:49:01)
+execution time of all jobs (seconds): 21590.299915
+execution time per job: n=43 mean=502.100 var=1765.613 sd=42.019 min=459.629 med=479.625 max=583.423
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S6_convChunk2Chr' (2018-09-14 05:49:01)
+waiting for 1 job(s) with groupid 'SN79_STA_a0_TEannot_S6_convChunk2Chr' (2018-09-14 05:49:01)
+execution time per job: n=1 mean=0.439 var=0.000 sd=0.000 min=0.439 med=0.439 max=0.439
+step 6 finished successfully
+
+local date/time = 2018-9-14 / 6:18:42
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-14 / 6:18:42
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 7
+remove path doublons among the TE annotations
+remove TE annotations corresponding to SSRs
+WARNING: can't find table 'SN79_STA_a0_chk_allSSRs_set'. No SSRs removal.
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S7_RemoveDuplicatesAndSpuriousPaths' (2018-09-14 06:18:42)
+waiting for 1 job(s) with groupid 'SN79_STA_a0_TEannot_S7_RemoveDuplicatesAndSpuriousPaths' (2018-09-14 06:18:42)
+execution time per job: n=1 mean=0.394 var=0.000 sd=0.000 min=0.394 med=0.394 max=0.394
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S7_ConvChunk2Chr' (2018-09-14 06:18:57)
+waiting for 1 job(s) with groupid 'SN79_STA_a0_TEannot_S7_ConvChunk2Chr' (2018-09-14 06:18:58)
+execution time per job: n=1 mean=0.514 var=0.000 sd=0.000 min=0.514 med=0.514 max=0.514
+long join procedure to connect fragmented TE copies
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_S7_LongJoinsForTEs' (2018-09-14 06:19:13)
+waiting for 1 job(s) with groupid 'SN79_STA_a0_TEannot_S7_LongJoinsForTEs' (2018-09-14 06:19:13)
+execution time per job: n=1 mean=2.274 var=0.000 sd=0.000 min=2.274 med=2.274 max=2.274
+step 7 finished successfully
+
+local date/time = 2018-9-14 / 6:19:28
+version 2.5
+END TEannot.py
+
+
+START TEannot.py
+version 2.5
+local date/time = 2018-9-14 / 6:19:28
+project name = SN79_STA_a0
+project directory = /home/benjamin/Megan/REPET2/TEannot/SN79_SOL
+
+beginning of step 8
+build GFF3 files
+WARNING: can't find directory '/home/benjamin/Megan/REPET2/TEannot/SN79_SOL/SN79_STA_a0_SSRdetect/Comb'. SSRs are considered as not removed.
+WARNING: can't export SSR annotations, launch step 4 and 5 first
+Write GFF3 files...
+submitting job(s) with groupid 'SN79_STA_a0_TEannot_step8_GFF3' (2018-09-14 06:19:28)
+waiting for 1 job(s) with groupid 'SN79_STA_a0_TEannot_step8_GFF3' (2018-09-14 06:19:28)
+execution time per job: n=1 mean=2.976 var=0.000 sd=0.000 min=2.976 med=2.976 max=2.976
+step 8 finished successfully
+
+local date/time = 2018-9-14 / 6:19:43
+version 2.5
+END TEannot.py
+
+START PostAnalyzeTELib analysis 1
+Launch Blastclust...
+Compute stats...
+END PostAnalyzeTELib analysis 1
+START PostAnalyzeTELib analysis 2
+Compute classification stats...
+END PostAnalyzeTELib analysis 2
+START PostAnalyzeTELib analysis 3
+Compute annotation stats per TE...
+END PostAnalyzeTELib analysis 3
+START PostAnalyzeTELib analysis 3
+Compute annotation stats per TE...
+END PostAnalyzeTELib analysis 3
+START PostAnalyzeTELib analysis 3
+Compute annotation stats per TE...
+END PostAnalyzeTELib analysis 3
+START PostAnalyzeTELib analysis 3
+Compute annotation stats per TE...
+END PostAnalyzeTELib analysis 3
